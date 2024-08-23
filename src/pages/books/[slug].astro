@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content"
+import MainLayout from "../../layout/MainLayout.astro"
+import { CommentsForm } from "../../components"
+import  CommentsList  from "../../components/CommentsList/index.astro"
+
+export async function getStaticPaths() {
+	const books = await getCollection('books')
+
+	return books.map((book: any) => ({
+		params: {slug: book.slug},
+		props: {books: book.data}
+	}))
+}
+
+const { books } = Astro.props;
+---
+
+<MainLayout>
+	<a href="/">back</a>
+  <h1>{books.title}</h1>
+  <h2>{books.shortContent}</h2>
+  <img src={books.image}/>
+	<CommentsForm client:load/>
+	<CommentsList server:defer/>
+</MainLayout>

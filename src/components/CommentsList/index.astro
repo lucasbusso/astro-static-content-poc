@@ -1,0 +1,14 @@
+---
+const getComments = () => Promise.resolve(["comment 1", "comment 2", "comment 3", "comment 4"])
+const comments = await getComments()
+---
+
+<>
+  <ul>
+    {comments.map(comment => (
+      <li>
+        {comment}
+      </li>
+    ))}
+  </ul>
+</>

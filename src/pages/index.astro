@@ -1,16 +1,28 @@
 ---
+import { getCollection } from "astro:content"
+import MainLayout from "../layout/MainLayout.astro"
+import {LikeButton} from "../components"
 
+const books = await getCollection("books")
+const authors = await getCollection("authors")
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="FE books">
+	<h1>FE books</h1>
+	<ul>
+		{books.map((book: any) => (
+			<a href={`/books/${book.slug}/`}>
+			<li>
+				<img src={book.data.image}/>
+				<div>
+					<h3>{book.data.title}</h3>
+					<p>{book.data.shortContent}</p>
+					<p>By {authors.find((a: any) => a.slug === book.data.author)?.data.name}</p>
+				</div>
+				<LikeButton client:load />
+			</li>
+			</a>
+		))}
+	</ul>
+</MainLayout>
+
